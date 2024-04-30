@@ -84,7 +84,11 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.d(TAG, "Service connected: " + name);
-            initialize(((FlutterLocationService.LocalBinder) service).getService());
+            if (service instanceof FlutterLocationService.LocalBinder) {
+                initialize(((FlutterLocationService.LocalBinder) service).getService());
+            } else {
+                Log.e(TAG, "Wrong instance of binder received. Expected FlutterLocationService.LocalBinder, got: " + service.getClass().getName());
+            }
         }
 
         @Override
